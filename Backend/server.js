@@ -13,6 +13,12 @@ app.use(express.urlencoded({ extended: false }));
 import ConnectDB from "./Database/ConnectDB.js";
 ConnectDB();
 
+// Importing Routes
+import authRoutes from "./Routes/authRoutes.js";
+
+// Defining Routes
+app.use("/api/auth", authRoutes);
+
 app.listen(PORT, () => {
   console.log(`Server is Running in the Port ${PORT}`);
 });
