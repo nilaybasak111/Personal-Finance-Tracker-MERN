@@ -2,13 +2,16 @@ import express from "express";
 const router = express.Router();
 
 import authController from "../Controllers/authController.js";
+import { validate } from "../Middlewares/validateInputes.js";
+import { signUpSchema, logInSchema } from "../utils/authValidator.js";
 
 // Auth Testing Route
 router.get("/", (req, res) => {
   res.send("<h3>Auth Page Works</h3>");
 });
 
-router.post("/login", authController.logIn); // Login Route
-router.post("/signup", authController.signUp); // Signup Route
+// Auth Routes
+router.post("/login", validate(logInSchema), authController.logIn); // Login Route
+router.post("/signup", validate(signUpSchema), authController.signUp); // Signup Route
 
 export default router;
