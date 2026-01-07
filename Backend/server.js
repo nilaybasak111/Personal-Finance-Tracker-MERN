@@ -15,9 +15,11 @@ ConnectDB();
 
 // Importing Routes
 import authRoutes from "./Routes/authRoutes.js";
+import transactionRoutes from "./Routes/transactionRoutes.js";
 
 // Defining Routes
 app.use("/api/auth", authRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is Running in the Port ${PORT}`);

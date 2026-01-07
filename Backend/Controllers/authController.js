@@ -36,7 +36,7 @@ const authController = {
             expiresIn: "1d",
           }
         );
-        console.log("token in signup ", token);
+        //console.log("token in signup ", token);
         res.status(201).json({
           message: "User Created Successfully",
           jwt: token,

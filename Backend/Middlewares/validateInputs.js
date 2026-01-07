@@ -28,3 +28,16 @@ export const validate = (schema) => (req, res, next) => {
     });
   }
 };
+
+
+export const transactionValidator = (req, res, next) => {
+  try {
+    const { type, amount, category } = req.body;
+    if (!type || !amount || !category) {
+      return res.status(400).json({ message: "All Fields Are Required" });
+    }
+    next();
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};

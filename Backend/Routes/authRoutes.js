@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 
 import authController from "../Controllers/authController.js";
-import { validate } from "../Middlewares/validateInputes.js";
+import { validate } from "../Middlewares/validateInputs.js";
 import { signUpSchema, logInSchema } from "../utils/authValidator.js";
 
 // Auth Testing Route
