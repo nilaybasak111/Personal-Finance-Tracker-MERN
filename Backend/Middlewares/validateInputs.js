@@ -52,3 +52,34 @@ export const aiValidator = (req, res, next) => {
     return res.status(500).json({ message: "Server Error" });
   }
 };
+
+export const insertBulkTransactionsValidator = (req, res, next) => {
+  try {
+    const { transactions } = req.body;
+
+    // Must Exist and Must be an Array
+    if (
+      !transactions ||
+      typeof transactions !== "object" ||
+      !Array.isArray(transactions) ||
+      transactions.length === 0
+    ) {
+      return res.status(400).json({ message: "Transactions are required" });
+    }
+
+    // Validate Every Transaction
+    for (const t of transactions) {
+      if (!t.type || !t.amount || !t.category) {
+        return res.status(400).json({ message: "All Fields Are Required" });
+      }
+
+      // Amount Ahould Be A Number
+      if (isNaN(t.amount)) {
+        return res.status(400).json({ message: "Amount must be a number" });
+      }
+    }
+    next();
+  } catch (error) {
+    return res.status(500).json({ message: "Server Error" });
+  }
+};

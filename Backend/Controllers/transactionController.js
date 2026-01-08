@@ -1,9 +1,12 @@
 import Transaction from "../Schema/TransactionSchema.js";
 
 const transactionController = {
-  // Insert Transaction into Database
-  /* Headers: Authorization: Bearer <token>
-       Request Body -
+  // Insert Transaction into Database Mainly for Manual Entry by User
+  /* 
+     Route:
+     POST /api/transactions
+     Headers: Authorization: Bearer <token>
+     Request Body -
         {
           "userId" : Comming From JWT Automatically,
           "type" : "imcome" or "expense",
@@ -12,8 +15,7 @@ const transactionController = {
           "description" : "Biryani From The Nearby Shop",
           "paymentMethod" : "cash" or "card" or "upi" or "bank", (optional)
         }
-    */
-
+  */
   insertTransaction: async (req, res) => {
     //console.log(req.user);
     const { type, amount, category, description, paymentMethod } = req.body;
@@ -42,6 +44,57 @@ const transactionController = {
           paymentMethod: paymentMethod,
           date: newTransaction.date,
         },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server Error" });
+    }
+  },
+
+  // Insert Bulk Transactions into Database Mainly for Insertion by AI
+  /*
+     Route:
+     POST /api/transactions/bulk
+     Headers: Authorization: Bearer <token>
+     Request Body -
+        {
+          "transactions": [
+            {
+              "type": "income",
+              "amount": 1000,
+              "category": "Family",
+              "description": "Received money from mom",
+              "paymentMethod": null
+            },
+            {
+              "type": "expense",
+              "amount": 200,
+              "category": "Food",
+              "description": "Ate pizza",
+              "paymentMethod": null
+            }
+          ]
+       }
+  */
+  insertBulkTransactions: async (req, res) => {
+    const { transactions } = req.body;
+    // Getting User Id From JWT
+    const user = req.user;
+    try {
+      // Adding User Id to Every Transaction
+      const newTransactions = transactions.map((t) => ({
+        ...t,
+        userId: user.id,
+        date: Date.now(),
+      }));
+
+      // Inserting Transactions into Database
+      const saveTransactions = await Transaction.insertMany(newTransactions);
+
+      res.status(201).json({
+        message: "Successfully Added The New Transactions",
+        count: saveTransactions.length,
+        transactions: saveTransactions,
       });
     } catch (error) {
       console.log(error);

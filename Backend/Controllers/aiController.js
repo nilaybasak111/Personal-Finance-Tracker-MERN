@@ -28,7 +28,6 @@ const AiController = {
      }
   */
 
-  // POST /api/ai/parse
   parseTransaction: async (req, res) => {
     const { text } = req.body;
 

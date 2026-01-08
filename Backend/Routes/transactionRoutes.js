@@ -3,7 +3,10 @@ const router = express.Router();
 
 import authMiddleware from "../Middlewares/authMiddleware.js";
 import transactionController from "../Controllers/transactionController.js";
-import { transactionValidator } from "../Middlewares/validateInputs.js";
+import {
+  transactionValidator,
+  insertBulkTransactionsValidator,
+} from "../Middlewares/validateInputs.js";
 
 // Transaction Testing Route
 router.get("/test", authMiddleware, (req, res) => {
@@ -17,5 +20,11 @@ router.post(
   transactionValidator,
   transactionController.insertTransaction
 ); // Income or Expense Route
+router.post(
+  "/bulk",
+  authMiddleware,
+  insertBulkTransactionsValidator,
+  transactionController.insertBulkTransactions
+); // Insert Bulk or Single Transaction Route Get By AI
 
 export default router;
