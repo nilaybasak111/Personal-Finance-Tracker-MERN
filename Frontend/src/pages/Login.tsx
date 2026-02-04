@@ -39,7 +39,7 @@ const Login: React.FC = () => {
       console.log(res.data);
       localStorage.setItem("token", res.data.jwt);
 
-      navigate("/");
+      navigate("/dashboard");
     } catch (err: any) {
       setError(err.response?.data?.message || "Invalid email or password");
     } finally {

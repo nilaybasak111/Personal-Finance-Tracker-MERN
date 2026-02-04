@@ -14,12 +14,15 @@ router.get("/test", authMiddleware, (req, res) => {
 });
 
 // Transaction Routes
+router.get("/", authMiddleware, transactionController.fetchAllTransactions); // Fetch All Transactions
+
 router.post(
   "/",
   authMiddleware,
   transactionValidator,
   transactionController.insertTransaction
 ); // Income or Expense Route
+
 router.post(
   "/bulk",
   authMiddleware,

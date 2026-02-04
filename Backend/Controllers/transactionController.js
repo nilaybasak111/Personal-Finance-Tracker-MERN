@@ -101,6 +101,19 @@ const transactionController = {
       res.status(500).json({ message: "Server Error" });
     }
   },
+
+  // Fetch All Transactions
+  fetchAllTransactions: async (req, res) => {
+    // Getting User Id From JWT
+    const user = req.user;
+    try {
+      const allTransactions = await Transaction.find({ userId: user.id });
+      res.status(200).json(allTransactions);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server Error" });
+    }
+  },
 };
 
 export default transactionController;

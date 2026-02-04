@@ -1,9 +1,16 @@
-import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from "react-router-dom";
 
 import Navbar from "./components/Navbar";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import Dashboard from "./pages/Dashboard";
 
 function AppLayout() {
   const location = useLocation();
@@ -17,9 +24,24 @@ function AppLayout() {
       {!hideNavbar && <Navbar />}
 
       <Routes>
-        {/* Public Routes*/}
+        {/* Default Route */}
+        <Route
+          path="/"
+          element={
+            localStorage.getItem("token") ? (
+              <Navigate to="/dashboard" />
+            ) : (
+              <Navigate to="/login" />
+            )
+          }
+        />
+
+        {/* Public Routes */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+
+        {/* Private Routes */}
+        <Route path="/dashboard" element={<Dashboard />} />
       </Routes>
     </>
   );
@@ -27,10 +49,8 @@ function AppLayout() {
 
 export default function App() {
   return (
-    <>
-      <BrowserRouter>
-        <AppLayout />
-      </BrowserRouter>
-    </>
+    <BrowserRouter>
+      <AppLayout />
+    </BrowserRouter>
   );
 }
