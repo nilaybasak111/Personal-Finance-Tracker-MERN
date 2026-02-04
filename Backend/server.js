@@ -1,9 +1,13 @@
 import dotenv from "dotenv";
 dotenv.config({ path: "../.env" }); // Adding Path for .env
 import express from "express";
+import cors from "cors";
 
 const app = express();
 const PORT = process.env.PORT;
+
+// Configuration of CORS
+app.use(cors());
 
 //Configuration of json Data for the API
 app.use(express.json());

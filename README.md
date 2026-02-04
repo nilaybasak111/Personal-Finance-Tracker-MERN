@@ -122,14 +122,14 @@ Example Output:
 }
 ```
 
-🧾 Transactions
+### 🧾 Transactions
 
 | Method | Route                    | Description                               |
 | ------ | ------------------------ | ----------------------------------------- |
 | POST   | `/api/transactions`      | Save single transaction                   |
 | POST   | `/api/transactions/bulk` | Save multiple transactions (AI confirmed) |
 
-🧪 Example AI → DB Flow
+### 🧪 Example AI → DB Flow
 
 User types text
  → POST /api/ai/parse
@@ -137,27 +137,22 @@ User types text
  → POST /api/transactions/bulk
  → Transactions saved
 
-🛡️ Security & Validation
+---
+## 🛡️ Security & Validation
+  - JWT authentication
+  - Request validation for all endpoints
+  - AI output normalization & safety checks
+  - User‑scoped database writes
 
-    JWT authentication
+## 🧠 Design Highlights
+  - Supports single & multi‑transaction AI prompts
+  - Prevents AI mistakes via user confirmation
+  - Clean separation of concerns
+  - Production‑grade backend architecture
 
-    Request validation for all endpoints
+---
 
-    AI output normalization & safety checks
-
-    User‑scoped database writes
-
-🧠 Design Highlights
-
-    Supports single & multi‑transaction AI prompts
-
-    Prevents AI mistakes via user confirmation
-
-    Clean separation of concerns
-
-    Production‑grade backend architecture
-
-🏁 Current Status
+## 🏁 Current Status
 
 Backend Core: Complete ✅
 Ready for frontend development and analytics integration.

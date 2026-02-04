@@ -57,7 +57,7 @@ const AiController = {
             """ ${text} """
             `;
 
-      // Sending Prompt to HuggingFace mMdel
+      // Sending Prompt to HuggingFace Model
       const response = await aiClient.chat.completions.create({
         model: "meta-llama/Llama-3.1-8B-Instruct:sambanova",
         messages: [{ role: "user", content: prompt }],
