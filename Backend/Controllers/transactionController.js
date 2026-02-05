@@ -103,6 +103,12 @@ const transactionController = {
   },
 
   // Fetch All Transactions
+    /*
+     Route:
+     GET /api/transactions/
+     Headers: Authorization: Bearer <token>
+     Request Body - {}
+  */
   fetchAllTransactions: async (req, res) => {
     // Getting User Id From JWT
     const user = req.user;
@@ -114,6 +120,44 @@ const transactionController = {
       res.status(500).json({ message: "Server Error" });
     }
   },
-};
 
+  // Edit Transaction
+    /*
+     Route:
+     PATCH /api/transactions/:id
+     Headers: Authorization: Bearer <token>
+     Request Body -
+        {
+          "type" : "imcome" or "expense", (optional)
+          "amount" : 200, (optional)
+          "category" : "Food", (optional)
+          "description" : "Biryani From The Nearby Shop", (optional)
+          "paymentMethod" : "cash" or "card" or "upi" or "bank", (optional)
+       }
+  */
+  editTransaction: async (req, res) => {
+    const { id } = req.params;
+    const { type, amount, category, description, paymentMethod } = req.body;
+    try {
+      const updatedTransaction = await Transaction.findByIdAndUpdate(
+        id,
+        {
+          type,
+          amount,
+          category,
+          description,
+          paymentMethod,
+        },
+        { new: true }
+      );
+      res.status(200).json({
+        message: `Successfully Updated The Transaction With Id ${id}`,
+        transaction: updatedTransaction,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server Error" });
+    }
+  },
+};
 export default transactionController;

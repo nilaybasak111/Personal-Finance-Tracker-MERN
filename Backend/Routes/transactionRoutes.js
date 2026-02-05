@@ -30,4 +30,6 @@ router.post(
   transactionController.insertBulkTransactions
 ); // Insert Bulk or Single Transaction Route Get By AI
 
+router.patch("/:id", authMiddleware, transactionController.editTransaction); // Edit Transaction
+
 export default router;
