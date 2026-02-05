@@ -34,28 +34,56 @@ const AiController = {
     try {
       // Prompt Sent to AI Model
       const prompt = `
-            You are a finance assistant.
+                  You are a JSON API.
 
-            Extract ALL financial events from the text below.
+                  Your task is to extract financial transactions from text.
 
-            Return ONLY valid JSON in this exact format:
+                  You MUST follow these rules:
 
-            {
-              "transactions": [
-                {
-                  "type": "income or expense",
-                  "amount": number,
-                  "category": string,
-                  "description": string,
-                  "paymentMethod": "cash | card | upi | bank | null",
-                  "confidence": number between 0 and 1
-                }
-              ]
-            }
+                  1. Output ONLY valid JSON.
+                  2. Do NOT add explanations.
+                  3. Do NOT add markdown.
+                  4. Do NOT add comments.
+                  5. Do NOT add emojis.
+                  6. Do NOT add extra text.
+                  7. Do NOT wrap in code blocks.
+                  8. Use null if data is missing.
+                  9. Use only the allowed values.
 
-            Text:
-            """ ${text} """
-            `;
+                  ALLOWED VALUES:
+
+                  type: "income" | "expense"
+                  paymentMethod: "cash" | "card" | "upi" | "bank" | "others" | null
+
+                  Return EXACTLY this format:
+
+                  {
+                    "transactions": [
+                      {
+                        "type": "income" | "expense",
+                        "amount": number,
+                        "category": string,
+                        "description": string,
+                        "paymentMethod": "cash" | "card" | "upi" | "bank" | "others" | null,
+                        "confidence": number
+                      }
+                    ]
+                  }
+
+                  IMPORTANT:
+                  - confidence must be between 0 and 1
+                  - amount must be a number (no quotes)
+                  - category must be lowercase
+                  - description must be short and clear
+                  - If no transaction is found, return:
+
+                  {
+                    "transactions": []
+                  }
+
+                  Text:
+                  """${text}"""
+                  `;
 
       // Sending Prompt to HuggingFace Model
       const response = await aiClient.chat.completions.create({
