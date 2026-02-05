@@ -11,10 +11,12 @@ const Navbar = () => {
 
   return (
     <nav className="bg-blue-600 text-white px-6 py-3 flex items-center justify-between shadow-md">
-      <div className="text-xl font-bold">💰 SmartTracker</div>
+      <div className="text-xl font-bold">
+        <Link to="/">💰 SmartTracker</Link>
+      </div>
 
       <div className="flex gap-6">
-        <Link to="/" className="hover:text-blue-200">
+        <Link to="/dashboard" className="hover:text-blue-200">
           Dashboard
         </Link>
 
