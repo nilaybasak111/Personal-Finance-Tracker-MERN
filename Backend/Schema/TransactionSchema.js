@@ -4,7 +4,7 @@ const transactionSchema = new mongoose.Schema(
   {
     userId: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "userSchema",
+      ref: "User",
       required: true,
     },
 
@@ -30,7 +30,7 @@ const transactionSchema = new mongoose.Schema(
 
     paymentMethod: {
       type: String,
-      enum: ["cash", "card", "upi", "bank"],
+      enum: ["cash", "card", "upi", "bank", "other", null],
     },
 
     date: {
