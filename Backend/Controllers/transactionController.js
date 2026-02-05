@@ -103,7 +103,7 @@ const transactionController = {
   },
 
   // Fetch All Transactions
-    /*
+  /*
      Route:
      GET /api/transactions/
      Headers: Authorization: Bearer <token>
@@ -122,7 +122,7 @@ const transactionController = {
   },
 
   // Edit Transaction
-    /*
+  /*
      Route:
      PATCH /api/transactions/:id
      Headers: Authorization: Bearer <token>
@@ -153,6 +153,27 @@ const transactionController = {
       res.status(200).json({
         message: `Successfully Updated The Transaction With Id ${id}`,
         transaction: updatedTransaction,
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: "Server Error" });
+    }
+  },
+
+  // Delete Transaction
+  /*
+     Route:
+     DELETE /api/transactions/:id
+     Headers: Authorization: Bearer <token>
+     Request Body - {}
+  */
+  deleteTransaction: async (req, res) => {
+    const { id } = req.params;
+    try {
+      const deletedTransaction = await Transaction.findByIdAndDelete(id);
+      res.status(200).json({
+        message: `Successfully Deleted The Transaction With Id ${id}`,
+        transaction: deletedTransaction,
       });
     } catch (error) {
       console.log(error);

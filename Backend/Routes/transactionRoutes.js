@@ -32,4 +32,6 @@ router.post(
 
 router.patch("/:id", authMiddleware, transactionController.editTransaction); // Edit Transaction
 
+router.delete("/:id", authMiddleware, transactionController.deleteTransaction); // Delete Transaction
+
 export default router;
