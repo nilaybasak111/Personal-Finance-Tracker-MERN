@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import DataTable, { type TableColumn } from "react-data-table-component";
 
 interface Transaction {
   _id: string;
   type: "income" | "expense";
   amount: number;
   category: string;
+  description?: string;
   date: string;
 }
 
@@ -56,7 +58,7 @@ const Dashboard = () => {
       setExpense(totalExpense);
     } catch (err: any) {
       console.error(err);
-      setError(err.response?.data?.message || "Failed to load transactions");
+      setError(err.response?.data?.message || "Failed to Load Transactions");
     } finally {
       setLoading(false);
     }
@@ -64,11 +66,57 @@ const Dashboard = () => {
 
   const balance = income - expense;
 
+  const columns: TableColumn<Transaction>[] = [
+    {
+      name: "Date",
+      selector: (row) => new Date(row.date).toLocaleDateString(),
+      sortable: true,
+    },
+    {
+      name: "Type",
+      cell: (row) => (
+        <span
+          className={`px-2 py-1 rounded-full text-xs font-medium ${
+            row.type === "income"
+              ? "bg-green-100 text-green-700"
+              : "bg-red-100 text-red-700"
+          }`}
+        >
+          {row.type}
+        </span>
+      ),
+    },
+    {
+      name: "Category",
+      selector: (row) =>
+        row.category.charAt(0).toUpperCase() + row.category.slice(1),
+      sortable: true,
+      minWidth: "150px",
+    },
+    {
+      name: "Description",
+      cell: (row) =>
+        row.description
+          ? row.description.charAt(0).toUpperCase() + row.description.slice(1)
+          : "No description",
+      grow: 1,
+      maxWidth: "250px",
+    },
+    {
+      name: "Amount",
+      selector: (row) => row.amount,
+      sortable: true,
+      right: true,
+      width: "120px",
+      cell: (row) => <span className="font-semibold">₹{row.amount}</span>,
+    },
+  ];
+
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
       {/* Page Title */}
       <h1 className="text-center text-3xl font-bold mb-6 text-gray-800">
-        DashBoard
+        Dashboard
       </h1>
 
       {/* Summary Cards */}
@@ -98,70 +146,36 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Status */}
-      {loading && (
-        <p className="text-gray-500 text-center">Loading Dashboard...</p>
-      )}
+      {/* Error */}
+      {error && <p className="text-red-500 text-center mb-4">{error}</p>}
 
-      {error && <p className="text-red-500 text-center">{error}</p>}
+      {/* Data Table */}
+      <div className="bg-white shadow-lg rounded-xl p-6">
+        <h2 className="text-lg font-semibold mb-4 text-gray-700">
+          Recent Transactions
+        </h2>
 
-      {/* Transactions Table */}
-      {!loading && !error && (
-        <div className="bg-white shadow-lg rounded-xl p-6">
-          <h2 className="text-lg font-semibold mb-4 text-gray-700">
-            Recent Transactions
-          </h2>
-
-          {transactions.length === 0 ? (
-            <p className="text-gray-500 text-center">No transactions found</p>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm border-collapse">
-                <thead>
-                  <tr className="bg-gray-100 text-gray-600 text-left">
-                    <th className="py-3 px-3">Date</th>
-                    <th className="px-3">Type</th>
-                    <th className="px-3">Category</th>
-                    <th className="px-3">Amount</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  {transactions.map((tx) => (
-                    <tr
-                      key={tx._id}
-                      className="border-b hover:bg-gray-50 transition"
-                    >
-                      <td className="py-3 px-3">
-                        {new Date(tx.date).toLocaleDateString()}
-                      </td>
-
-                      <td className="px-3">
-                        <span
-                          className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            tx.type === "income"
-                              ? "bg-green-100 text-green-700"
-                              : "bg-red-100 text-red-700"
-                          }`}
-                        >
-                          {tx.type}
-                        </span>
-                      </td>
-
-                      <td className="px-3">
-                        {tx.category.charAt(0).toUpperCase() +
-                          tx.category.slice(1)}
-                      </td>
-
-                      <td className="px-3 font-semibold">₹{tx.amount}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
-        </div>
-      )}
+        <DataTable
+          columns={columns}
+          data={transactions}
+          progressPending={loading}
+          pagination
+          paginationPerPage={10}
+          paginationRowsPerPageOptions={[10, 20, 30, 50]}
+          highlightOnHover
+          responsive
+          persistTableHead
+          noDataComponent="No Transactions Found"
+          customStyles={{
+            headCells: {
+              style: {
+                fontWeight: "bold",
+                fontSize: "15px",
+              },
+            },
+          }}
+        />
+      </div>
     </div>
   );
 };
